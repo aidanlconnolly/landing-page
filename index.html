@@ -280,13 +280,38 @@ html.dark footer a { color: #58a6ff; }
   <div class="container">
 
     <section>
-      <p class="section-label">Projects</p>
-      <div class="grid" id="liveGrid"></div>
+      <p class="section-label">Professional Development</p>
+      <div class="grid" id="profGrid"></div>
     </section>
 
     <section>
-      <p class="section-label">In the Works</p>
-      <div class="grid" id="soonGrid"></div>
+      <p class="section-label">Games</p>
+      <div class="grid" id="gamesGrid"></div>
+    </section>
+
+    <section>
+      <p class="section-label">Finance</p>
+      <div class="grid" id="financeGrid"></div>
+    </section>
+
+    <section>
+      <p class="section-label">Sports</p>
+      <div class="grid" id="sportsGrid"></div>
+    </section>
+
+    <section>
+      <p class="section-label">Startups</p>
+      <div class="grid" id="startupGrid"></div>
+    </section>
+
+    <section>
+      <p class="section-label">Learning</p>
+      <div class="grid" id="learningGrid"></div>
+    </section>
+
+    <section>
+      <p class="section-label">Personal</p>
+      <div class="grid" id="personalGrid"></div>
     </section>
 
   </div>
@@ -312,53 +337,71 @@ html.dark footer a { color: #58a6ff; }
 <script>
 // ── LIVE PROJECTS — updated by /update-landing-page ──────────────
 const LIVE = [
-  { name: 'Job Finder App',       url: 'https://aidanlconnolly.github.io/jobfinder/',      icon: '💼', desc: 'Search and track job opportunities'        },
-  { name: 'Resume Website',       url: 'https://aidanlconnolly.github.io/aidanlconnolly/', icon: '📄', desc: 'Personal portfolio and resume'              },
-  { name: 'Golf Range Game',      url: 'https://golf-range.vercel.app/',                   icon: '⛳', desc: 'Browser-based golf driving range game'      },
-  { name: 'Santorini Guide',      url: 'https://santorini-guide.vercel.app/',              icon: '✈️', desc: 'Travel guide for Santorini, Greece'         },
-  { name: 'Landing Page',         url: 'https://landing-page-alpha-ten-99.vercel.app/',    icon: '🌐', desc: 'This page — pet projects as clickable cards' },
-  { name: 'Dream Career Picker',  url: 'https://dream-career-picker-28ez.vercel.app/',     icon: '🚀', desc: 'Explore and map out future career paths'     },
-  { name: 'World Cup Picker',         url: 'https://world-cup-bracket-picker.vercel.app/',     icon: '⚽', desc: 'Group stage and bracket predictor'                        },
-  { name: 'PGA Championship Tracker', url: 'https://pga-championship-tracker.vercel.app/',    icon: '⛳', desc: 'Stat-driven picks tracking strokes gained & recent form' },
-  { name: 'Tower Defense Game',        url: 'https://tower-defense-game-mauve.vercel.app/',   icon: '🎮', desc: 'A browser-based tower defence game'                        },
-  { name: 'Google Extensions',        icon: '🧩', desc: 'Custom Chrome extensions — Tab Grouper live now', modal: 'extensions' },
-  { name: 'Learn Claude Code',        url: 'https://learn-claude-code-xi.vercel.app/',          icon: '📚', desc: 'Claude Code upskilling resources and progress tracker' },
+  { name: 'Job Finder App',            category: 'prof',     url: 'https://aidanlconnolly.github.io/jobfinder/',      icon: '💼', desc: 'Search and track job opportunities'        },
+  { name: 'Resume Website',            category: 'prof',     url: 'https://aidanlconnolly.github.io/aidanlconnolly/', icon: '📄', desc: 'Personal portfolio and resume'              },
+  { name: 'Golf Range Game',           category: 'games',    url: 'https://golf-range.vercel.app/',                   icon: '⛳', desc: 'Browser-based golf driving range game'      },
+  { name: 'Santorini Guide',           category: 'personal', url: 'https://santorini-guide.vercel.app/',              icon: '✈️', desc: 'Travel guide for Santorini, Greece'         },
+  { name: 'Landing Page',              category: 'personal', url: 'https://landing-page-alpha-ten-99.vercel.app/',    icon: '🌐', desc: 'This page — pet projects as clickable cards' },
+  { name: 'Dream Career Picker',       category: 'prof',     url: 'https://dream-career-picker-28ez.vercel.app/',     icon: '🚀', desc: 'Explore and map out future career paths'     },
+  { name: 'World Cup Picker',          category: 'sports',   url: 'https://world-cup-bracket-picker.vercel.app/',     icon: '⚽', desc: 'Group stage and bracket predictor'           },
+  { name: 'PGA Championship Tracker',  category: 'sports',   url: 'https://pga-championship-tracker.vercel.app/',     icon: '⛳', desc: 'Stat-driven picks tracking strokes gained & recent form' },
+  { name: 'Tower Defense Game',        category: 'games',    url: 'https://tower-defense-game-mauve.vercel.app/',     icon: '🎮', desc: 'A browser-based tower defence game'           },
+  { name: 'Google Extensions',         category: 'personal', icon: '🧩', desc: 'Custom Chrome extensions — Tab Grouper live now', modal: 'extensions' },
+  { name: 'Learn Claude Code',         category: 'learning', url: 'https://learn-claude-code-xi.vercel.app/',         icon: '📚', desc: 'Claude Code upskilling resources and progress tracker' },
 ];
 
 // ── COMING SOON — edit descriptions freely ────────────────────────
 const SOON = [
-  { name: 'Travel Itinerary App',     icon: '🗺️', desc: 'Plan and visualize travel itineraries'                                                   },
-  { name: 'Personal Finance Tracker', icon: '💰', desc: 'Dashboard: Marcus, BofA & SoFi accounts, cash-flow forecasting, and stock sell strategy' },
-  { name: 'Startup Idea Generator',   icon: '💡', desc: 'Good ideas for common and niche problems'                                                },
-  { name: 'Personal Doctor',          icon: '🩺', desc: 'Track recurring health issues and symptoms over time'                                    },
-  { name: 'Golf Swing Assessor',      icon: '🏌️', desc: 'Compare swing videos to pinpoint differences'                                           },
-  { name: 'Maximize Amex Credits',    icon: '💳', desc: 'Track and maximize Amex card statement credits'                                          },
-  { name: 'Italian Learning Tool',    icon: '🇮🇹', desc: 'Interactive tool for learning Italian vocabulary and grammar'                            },
-  { name: 'Stock Trader',             icon: '📈', desc: 'Algorithmic trading using quantitative strategies'                                       },
-  { name: 'Startup Consultant',       icon: '🏢', desc: 'AI consultant that mirrors real consulting logic'                                         },
-  { name: 'Penalty Shootout Game',    icon: '⚽', desc: 'Interactive penalty shootout'                                                             },
+  { name: 'Travel Itinerary App',     category: 'personal', icon: '🗺️', desc: 'Plan and visualize travel itineraries'                                                   },
+  { name: 'Personal Finance Tracker', category: 'finance',  icon: '💰', desc: 'Dashboard: Marcus, BofA & SoFi accounts, cash-flow forecasting, and stock sell strategy' },
+  { name: 'Startup Idea Generator',   category: 'startup',  icon: '💡', desc: 'Good ideas for common and niche problems'                                                },
+  { name: 'Personal Doctor',          category: 'personal', icon: '🩺', desc: 'Track recurring health issues and symptoms over time'                                    },
+  { name: 'Golf Swing Assessor',      category: 'sports',   icon: '🏌️', desc: 'Compare swing videos to pinpoint differences'                                           },
+  { name: 'Maximize Amex Credits',    category: 'finance',  icon: '💳', desc: 'Track and maximize Amex card statement credits'                                          },
+  { name: 'Italian Learning Tool',    category: 'learning', icon: '🇮🇹', desc: 'Interactive tool for learning Italian vocabulary and grammar'                            },
+  { name: 'Stock Trader',             category: 'finance',  icon: '📈', desc: 'Algorithmic trading using quantitative strategies'                                       },
+  { name: 'Startup Consultant',       category: 'startup',  icon: '🏢', desc: 'AI consultant that mirrors real consulting logic'                                         },
+  { name: 'Penalty Shootout Game',    category: 'games',    icon: '⚽', desc: 'Interactive penalty shootout'                                                             },
 ];
 
 // ── Render ────────────────────────────────────────────────────────
-document.getElementById('liveGrid').innerHTML = LIVE.map(p => p.modal
-  ? `<button class="card" onclick="openModal('${p.modal}')">
+function renderLive(p) {
+  if (p.modal) return `<button class="card" onclick="openModal('${p.modal}')">
        <span class="card-icon">${p.icon}</span>
        <div class="card-name">${p.name}</div>
        <div class="card-desc">${p.desc}</div>
-     </button>`
-  : `<a class="card" href="${p.url}" target="_blank" rel="noopener noreferrer">
+     </button>`;
+  return `<a class="card" href="${p.url}" target="_blank" rel="noopener noreferrer">
        <span class="card-icon">${p.icon}</span>
        <div class="card-name">${p.name}</div>
        <div class="card-desc">${p.desc}</div>
-     </a>`).join('');
+     </a>`;
+}
 
-document.getElementById('soonGrid').innerHTML = SOON.map(p => `
-  <span class="card soon">
+function renderSoon(p) {
+  return `<span class="card soon">
     <span class="badge">Coming Soon</span>
     <span class="card-icon">${p.icon}</span>
     <div class="card-name">${p.name}</div>
     <div class="card-desc">${p.desc}</div>
-  </span>`).join('');
+  </span>`;
+}
+
+[
+  { id: 'games',    cat: 'games'    },
+  { id: 'sports',   cat: 'sports'   },
+  { id: 'prof',     cat: 'prof'     },
+  { id: 'finance',  cat: 'finance'  },
+  { id: 'startup',  cat: 'startup'  },
+  { id: 'learning', cat: 'learning' },
+  { id: 'personal', cat: 'personal' },
+].forEach(({ id, cat }) => {
+  const cards = [
+    ...LIVE.filter(p => p.category === cat).map(renderLive),
+    ...SOON.filter(p => p.category === cat).map(renderSoon),
+  ];
+  document.getElementById(id + 'Grid').innerHTML = cards.join('');
+});
 
 // ── Modal ─────────────────────────────────────────────────────────
 const MODALS = {
