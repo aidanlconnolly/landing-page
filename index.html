@@ -280,6 +280,11 @@ html.dark footer a { color: #58a6ff; }
   <div class="container">
 
     <section>
+      <p class="section-label">Startups (full scale projects)</p>
+      <div class="grid" id="startupFullGrid"></div>
+    </section>
+
+    <section>
       <p class="section-label">Professional Development</p>
       <div class="grid" id="profGrid"></div>
     </section>
@@ -362,6 +367,7 @@ const LIVE = [
   { name: 'Language Learning App',   category: 'learning', url: 'https://language-tutor-silk.vercel.app/',        icon: '📚', desc: 'Learn Italian and French with interactive exercises' },
   { name: 'Famous Quotes',           category: 'learning', url: 'https://famous-quotes-nine.vercel.app/',         icon: '💬', desc: 'Motivational, philosophical, and historical quotes' },
   { name: 'Startup Learning App',    category: 'startup',  url: 'https://foundry-beta-henna.vercel.app/',         icon: '📚', desc: 'Learn startup fundamentals and frameworks'         },
+  { name: 'Looper Golf',             category: 'startup_full', url: 'https://looper-golf-flax.vercel.app/home',      icon: '⛳', desc: 'Full-scale golf startup'                            },
 ];
 
 // ── COMING SOON — edit descriptions freely ────────────────────────
@@ -392,13 +398,14 @@ function renderSoon(p) {
 }
 
 [
-  { id: 'games',    cat: 'games'    },
-  { id: 'sports',   cat: 'sports'   },
-  { id: 'prof',     cat: 'prof'     },
-  { id: 'finance',  cat: 'finance'  },
-  { id: 'startup',  cat: 'startup'  },
-  { id: 'learning', cat: 'learning' },
-  { id: 'personal', cat: 'personal' },
+  { id: 'startupFull', cat: 'startup_full' },
+  { id: 'games',       cat: 'games'    },
+  { id: 'sports',      cat: 'sports'   },
+  { id: 'prof',        cat: 'prof'     },
+  { id: 'finance',     cat: 'finance'  },
+  { id: 'startup',     cat: 'startup'  },
+  { id: 'learning',    cat: 'learning' },
+  { id: 'personal',    cat: 'personal' },
 ].forEach(({ id, cat }) => {
   const cards = [
     ...LIVE.filter(p => p.category === cat).map(renderLive),
