@@ -269,7 +269,13 @@ html.dark footer a { color: #58a6ff; }
 header {
   overflow: hidden;
   padding: 92px 0 76px;
-  position: sticky; top: 0; z-index: 0;   /* pinned; content scrolls up over it */
+  position: sticky; top: 0; z-index: 1;   /* pinned; dissolves as content scrolls over it */
+}
+
+/* soft interactive constellation behind the whole page */
+#constellation {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none; opacity: 0.55;
 }
 header::before {
   content: ""; position: absolute; inset: -20%; z-index: 0;
@@ -291,8 +297,9 @@ header::after {
 }
 .header-inner { position: relative; z-index: 1; will-change: opacity, transform; }
 
-/* the page body scrolls up and over the pinned, dissolving hero */
-main { position: relative; z-index: 2; background: var(--bg); }
+/* the page body scrolls up over the dissolving hero; transparent so the
+   constellation shows softly through the gutters */
+main { position: relative; z-index: 2; background: transparent; }
 
 /* editorial display title */
 header h1 {
@@ -640,8 +647,8 @@ const SECTIONS = [
   { id: 'learning',    cat: 'learning'     },
   { id: 'personal',    cat: 'personal'     },
 ];
-// The standout apps that get large bento tiles + a live screenshot front-and-centre.
-const FLAGSHIP = new Set(['PubLinx', 'Allora', 'Personal Finance Tracker', 'Tower Defense Game']);
+// No flagship tiles — every project is shown as an equal card.
+const FLAGSHIP = new Set();
 
 // Local screenshots (captured once, committed under /thumbs). Falls back to the emoji if missing.
 const THUMBS = {
@@ -739,7 +746,7 @@ if (heroInner && headerEl && !reduceMotion) {
   const onScroll = () => {
     const fadeOver = (headerEl.offsetHeight || 1) * 0.8;
     const p = Math.min(Math.max(window.scrollY / fadeOver, 0), 1);
-    heroInner.style.opacity = String(1 - p);
+    headerEl.style.opacity = String(1 - p);        // dissolve the whole hero (bg + content)
     heroInner.style.transform = `translateY(${(-p * 64).toFixed(1)}px)`;
   };
   window.addEventListener('scroll', onScroll, { passive: true });
@@ -794,6 +801,71 @@ document.addEventListener('pointermove', e => {
   card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
   card.style.setProperty('--my', (e.clientY - r.top) + 'px');
 });
+
+// ── Soft interactive constellation backdrop ──────────────────────
+(function constellation() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const canvas = document.createElement('canvas');
+  canvas.id = 'constellation';
+  document.body.prepend(canvas);
+  const ctx = canvas.getContext('2d');
+  let w = 0, h = 0, dpr = 1, pts = [];
+  const mouse = { x: -9999, y: -9999 };
+  const LINK = 130, MOUSE_LINK = 170;
+
+  function size() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth || document.documentElement.clientWidth || 1280;
+    h = window.innerHeight || document.documentElement.clientHeight || 800;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function seed() {
+    const n = Math.max(28, Math.min(90, Math.round(w * h / 22000)));
+    pts = Array.from({ length: n }, () => ({
+      x: Math.random() * w, y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.28, vy: (Math.random() - 0.5) * 0.28,
+    }));
+  }
+  // sky-blue on dark, deep-navy on light
+  const tone = () => document.documentElement.classList.contains('dark') ? '125,211,252' : '30,58,95';
+
+  function frame() {
+    ctx.clearRect(0, 0, w, h);
+    const c = tone();
+    for (const p of pts) {
+      p.x += p.vx; p.y += p.vy;
+      if (p.x < 0 || p.x > w) p.vx *= -1;
+      if (p.y < 0 || p.y > h) p.vy *= -1;
+    }
+    for (let i = 0; i < pts.length; i++) {
+      const a = pts[i];
+      for (let j = i + 1; j < pts.length; j++) {
+        const b = pts[j];
+        const dx = a.x - b.x, dy = a.y - b.y, d = Math.hypot(dx, dy);
+        if (d < LINK) {
+          ctx.strokeStyle = `rgba(${c},${(0.16 * (1 - d / LINK)).toFixed(3)})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+      }
+      const mdx = a.x - mouse.x, mdy = a.y - mouse.y, md = Math.hypot(mdx, mdy);
+      if (md < MOUSE_LINK) {
+        ctx.strokeStyle = `rgba(${c},${(0.3 * (1 - md / MOUSE_LINK)).toFixed(3)})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+      }
+      ctx.fillStyle = `rgba(${c},0.5)`;
+      ctx.beginPath(); ctx.arc(a.x, a.y, 1.5, 0, Math.PI * 2); ctx.fill();
+    }
+    requestAnimationFrame(frame);
+  }
+  window.addEventListener('resize', () => { size(); seed(); }, { passive: true });
+  window.addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+  window.addEventListener('pointerout', e => { if (!e.relatedTarget) { mouse.x = mouse.y = -9999; } }, { passive: true });
+  size(); seed(); frame();
+})();
 
 // ── Command palette (⌘K / Ctrl+K) ─────────────────────────────────
 const cmdk = document.getElementById('cmdk');
