@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌐</text></svg>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Aidan Connolly</title>
   <link rel="stylesheet" href="style.css" />
@@ -259,6 +260,197 @@ html.dark footer a { color: #58a6ff; }
 @media (max-width: 400px) {
   .grid { grid-template-columns: 1fr 1fr; }
 }
+
+/* ════════════════════════════════════════════════════
+   REDESIGN LAYER  (Tiers 1–3)
+   ════════════════════════════════════════════════════ */
+
+/* ── Hero: gradient mesh + grain ─────────────────── */
+header { overflow: hidden; padding: 64px 0 56px; }
+header::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(60% 80% at 12% 0%, rgba(88,166,255,0.30), transparent 60%),
+    radial-gradient(50% 70% at 88% 10%, rgba(168,85,247,0.26), transparent 60%),
+    radial-gradient(45% 60% at 60% 110%, rgba(16,185,129,0.22), transparent 60%);
+  animation: meshDrift 18s ease-in-out infinite alternate;
+}
+header::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes meshDrift {
+  from { transform: translate3d(0,0,0) scale(1); }
+  to   { transform: translate3d(-4%,2%,0) scale(1.1); }
+}
+.header-inner, .header-controls { position: relative; z-index: 1; }
+
+.bio { margin-bottom: 18px; }
+
+/* rotating word in the hero */
+.rotator { color: #fff; font-weight: 600; }
+.rotator .word {
+  display: inline-block; color: #7dd3fc;
+  animation: wordIn 0.5s ease;
+}
+@keyframes wordIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* stat strip */
+.stats { display: flex; gap: 22px; flex-wrap: wrap; margin-top: 18px; }
+.stat { display: flex; align-items: baseline; gap: 7px; }
+.stat b { font-size: 1.35rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+.stat span { font-size: 0.8rem; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── Toolbar: filter pills + search + surprise ───── */
+.toolbar {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: saturate(150%) blur(12px);
+  -webkit-backdrop-filter: saturate(150%) blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 0;
+}
+.toolbar-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 24px;
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.pills { display: flex; gap: 8px; flex-wrap: wrap; flex: 1; }
+.pill {
+  border: 1px solid var(--border); background: var(--card); color: var(--muted);
+  font: inherit; font-size: 0.78rem; font-weight: 600;
+  padding: 6px 13px; border-radius: 99px; cursor: pointer;
+  transition: all 0.15s; white-space: nowrap;
+}
+.pill:hover { color: var(--text); border-color: var(--muted); }
+.pill.active {
+  background: var(--navy); color: #fff; border-color: var(--navy);
+}
+html.dark .pill.active { background: #58a6ff; color: #0d1117; border-color: #58a6ff; }
+.tools { display: flex; gap: 8px; align-items: center; }
+.search {
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+  font: inherit; font-size: 0.82rem; padding: 7px 12px; border-radius: 8px;
+  width: 170px; transition: width 0.2s, border-color 0.15s;
+}
+.search:focus { outline: none; width: 210px; border-color: var(--navy); }
+html.dark .search:focus { border-color: #58a6ff; }
+.surprise {
+  border: 1px solid var(--border); background: var(--card); color: var(--text);
+  font: inherit; font-size: 0.82rem; font-weight: 600; padding: 7px 13px;
+  border-radius: 8px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+}
+.surprise:hover { border-color: var(--navy); transform: translateY(-1px); }
+.kbd-hint {
+  font-size: 0.72rem; color: var(--muted); border: 1px solid var(--border);
+  border-radius: 6px; padding: 4px 8px; cursor: pointer; white-space: nowrap;
+}
+.kbd-hint:hover { color: var(--text); }
+.kbd-hint kbd { font-family: inherit; font-weight: 700; }
+
+/* ── Cards: thumbnails + accents + bento ─────────── */
+.card {
+  padding: 0; display: flex; flex-direction: column;
+  --accent: var(--navy);
+}
+.card-thumb {
+  position: relative; aspect-ratio: 16 / 10; overflow: hidden;
+  display: grid; place-items: center;
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--accent) 18%, var(--card)),
+      var(--card));
+  border-bottom: 1px solid var(--border);
+}
+.card-thumb img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: top center;
+  opacity: 0; transition: opacity 0.45s ease;
+}
+.card-thumb img.on { opacity: 1; }
+.card-icon {
+  font-size: 2.2rem; line-height: 1; margin: 0;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.18));
+}
+.card-body { padding: 14px 16px 16px; }
+.card-name { margin-bottom: 4px; }
+.card:not(.soon):hover { border-color: var(--accent); }
+html.dark .card:not(.soon):hover { border-color: var(--accent); }
+.card-name { color: var(--accent); }
+html.dark .card-name { color: var(--text); }
+
+/* spotlight glow following the cursor */
+.card::after {
+  content: ""; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  border-radius: var(--radius);
+  background: radial-gradient(190px circle at var(--mx, 50%) var(--my, 50%),
+              color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%);
+  opacity: 0; transition: opacity 0.25s;
+}
+.card:not(.soon):hover::after { opacity: 1; }
+
+/* bento: flagship cards span two columns */
+.card.flagship { grid-column: span 2; }
+.card.flagship .card-thumb { aspect-ratio: 16 / 7; }
+.card.flagship .card-icon { font-size: 3rem; }
+.card.flagship .card-name { font-size: 1.1rem; }
+.card.flagship .badge-flag {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  background: var(--accent); color: #fff;
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 99px;
+}
+
+/* accent dot on section labels */
+.section-label { display: inline-flex; align-items: center; gap: 9px; }
+.section-label::before {
+  content: ""; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--accent, var(--navy));
+}
+
+/* ── Scroll reveal ───────────────────────────────── */
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity 0.5s ease, transform 0.5s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  header::before { animation: none; }
+}
+
+/* ── Command palette (⌘K) ────────────────────────── */
+.cmdk-backdrop {
+  display: none; position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.45); backdrop-filter: blur(3px);
+  align-items: flex-start; justify-content: center; padding: 14vh 20px 20px;
+}
+.cmdk-backdrop.open { display: flex; }
+.cmdk {
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  width: 100%; max-width: 540px; box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+.cmdk-input {
+  width: 100%; border: none; border-bottom: 1px solid var(--border);
+  background: transparent; color: var(--text); font: inherit; font-size: 1rem;
+  padding: 16px 18px;
+}
+.cmdk-input:focus { outline: none; }
+.cmdk-list { max-height: 320px; overflow-y: auto; padding: 8px; }
+.cmdk-item {
+  display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+  border-radius: 8px; cursor: pointer; color: var(--text);
+}
+.cmdk-item .ci-icon { font-size: 1.2rem; }
+.cmdk-item .ci-name { font-weight: 600; font-size: 0.9rem; }
+.cmdk-item .ci-cat { margin-left: auto; font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.cmdk-item.sel, .cmdk-item:hover { background: color-mix(in srgb, var(--navy) 10%, transparent); }
+html.dark .cmdk-item.sel, html.dark .cmdk-item:hover { background: rgba(88,166,255,0.14); }
+.cmdk-empty { padding: 24px; text-align: center; color: var(--muted); font-size: 0.88rem; }
+
+@media (max-width: 600px) {
+  .search { width: 130px; }
+  .search:focus { width: 150px; }
+  .kbd-hint { display: none; }
+}
+
   </style>
 </head>
 <body>
@@ -272,9 +464,22 @@ html.dark footer a { color: #58a6ff; }
     <div class="header-text">
       <h1>Aidan Connolly</h1>
       <p class="bio">Building things to help with everyday life and learning how to use AI for both personal and professional development.</p>
+      <p class="rotator">I build <span class="word" id="rotword">golf apps</span>.</p>
+      <div class="stats" id="stats"></div>
     </div>
   </div>
 </header>
+
+<div class="toolbar">
+  <div class="toolbar-inner">
+    <div class="pills" id="pills"></div>
+    <div class="tools">
+      <input class="search" id="search" type="search" placeholder="Search projects…" aria-label="Search projects" />
+      <button class="surprise" id="surprise" title="Open a random project">🎲 Surprise me</button>
+      <button class="kbd-hint" id="cmdkHint" aria-label="Open command palette"><kbd>⌘</kbd> K</button>
+    </div>
+  </div>
+</div>
 
 <main>
   <div class="container">
@@ -333,6 +538,14 @@ html.dark footer a { color: #58a6ff; }
   </div>
 </div>
 
+<!-- Command palette -->
+<div id="cmdk" class="cmdk-backdrop">
+  <div class="cmdk" role="dialog" aria-modal="true" aria-label="Search projects">
+    <input id="cmdkInput" class="cmdk-input" type="text" placeholder="Jump to a project…" autocomplete="off" />
+    <div id="cmdkList" class="cmdk-list"></div>
+  </div>
+</div>
+
 <footer>
   <div class="container">
     For inquiries: <a href="mailto:aidanlconnolly@gmail.com">aidanlconnolly@gmail.com</a>
@@ -378,44 +591,201 @@ const LIVE = [
 const SOON = [
 ];
 
+// ── Category metadata & helpers ───────────────────────────────────
+const CAT_META = {
+  startup_full: { accent: '#ef4444', label: 'Startups'        },
+  prof:         { accent: '#6366f1', label: 'Professional'    },
+  games:        { accent: '#ec4899', label: 'Games'           },
+  finance:      { accent: '#10b981', label: 'Finance'         },
+  sports:       { accent: '#f59e0b', label: 'Sports'          },
+  startup:      { accent: '#8b5cf6', label: 'Startup Learning'},
+  learning:     { accent: '#3b82f6', label: 'Learning'        },
+  personal:     { accent: '#14b8a6', label: 'Personal'        },
+};
+const SECTIONS = [
+  { id: 'startupFull', cat: 'startup_full' },
+  { id: 'prof',        cat: 'prof'         },
+  { id: 'games',       cat: 'games'        },
+  { id: 'finance',     cat: 'finance'      },
+  { id: 'sports',      cat: 'sports'       },
+  { id: 'startup',     cat: 'startup'      },
+  { id: 'learning',    cat: 'learning'     },
+  { id: 'personal',    cat: 'personal'     },
+];
+// The standout apps that get large bento tiles + a live screenshot front-and-centre.
+const FLAGSHIP = new Set(['PubLinx', 'Allora', 'Personal Finance Tracker', 'Tower Defense Game']);
+
+// Local screenshots (captured once, committed under /thumbs). Falls back to the emoji if missing.
+const THUMBS = {
+  'https://aidanlconnolly.github.io/jobfinder/': 'thumbs/job-finder-app.jpg',
+  'https://aidanlconnolly.github.io/aidanlconnolly/': 'thumbs/resume-website.jpg',
+  'https://golf-range.vercel.app/': 'thumbs/golf-range-game.jpg',
+  'https://santorini-guide.vercel.app/': 'thumbs/santorini-guide.jpg',
+  'https://aidanlconnolly.com/': 'thumbs/landing-page.jpg',
+  'https://dream-career-picker-28ez.vercel.app/': 'thumbs/dream-career-picker.jpg',
+  'https://world-cup-bracket-picker.vercel.app/': 'thumbs/world-cup-picker.jpg',
+  'https://pga-championship-tracker.vercel.app/': 'thumbs/pga-championship-tracker.jpg',
+  'https://tower-defense-game-mauve.vercel.app/': 'thumbs/tower-defense-game.jpg',
+  'https://learn-claude-code-xi.vercel.app/': 'thumbs/learn-claude-code.jpg',
+  'https://personal-finance-tracker-two-indol.vercel.app/': 'thumbs/personal-finance-tracker.jpg',
+  'https://startup-idea-generator-ex43nobmv-aidan-s-projects1.vercel.app/': 'thumbs/startup-idea-generator.jpg',
+  'https://penalty-shootout-rosy.vercel.app/': 'thumbs/penalty-shootout-game.jpg',
+  'https://amex-credits-maximizer.vercel.app/': 'thumbs/maximize-amex-credits.jpg',
+  'https://travel-app-eta-peach.vercel.app/index.html': 'thumbs/travel-itinerary-app.jpg',
+  'https://personal-doctor-green.vercel.app/': 'thumbs/personal-doctor.jpg',
+  'https://personal-rankings.vercel.app/': 'thumbs/books-series-movies.jpg',
+  'https://stadium-run.vercel.app/': 'thumbs/world-cup-stadium-run.jpg',
+  'https://golf-swing-assessor.vercel.app/': 'thumbs/golf-swing-assessor.jpg',
+  'https://history-learning-platform.vercel.app/': 'thumbs/history-learning-platform.jpg',
+  'https://post-mba-career-explorer.vercel.app/': 'thumbs/post-mba-career-explorer.jpg',
+  'https://learnallora.com/': 'thumbs/allora.jpg',
+  'https://famous-quotes-nine.vercel.app/': 'thumbs/famous-quotes.jpg',
+  'https://foundry-beta-henna.vercel.app/': 'thumbs/startup-learning-app.jpg',
+  'https://date-app-henna.vercel.app/': 'thumbs/date-app.jpg',
+  'https://peops-prep.vercel.app/': 'thumbs/pe-ops-learning-app.jpg',
+  'https://publinx.app/': 'thumbs/publinx.jpg',
+  'https://behavioral-prep.vercel.app/': 'thumbs/behavioral-prep.jpg',
+  'https://us-open-draft.vercel.app/': 'thumbs/us-open-tracker.jpg',
+};
+
+const accentOf = c => (CAT_META[c] || {}).accent || '#0a1628';
+const thumb    = u => THUMBS[u] || '';
+const esc      = s => String(s).replace(/"/g, '&quot;');
+
 // ── Render ────────────────────────────────────────────────────────
 function renderLive(p) {
-  if (p.modal) return `<button class="card" onclick="openModal('${p.modal}')">
-       <span class="card-icon">${p.icon}</span>
-       <div class="card-name">${p.name}</div>
-       <div class="card-desc">${p.desc}</div>
-     </button>`;
-  return `<a class="card" href="${p.url}" target="_blank" rel="noopener noreferrer">
-       <span class="card-icon">${p.icon}</span>
-       <div class="card-name">${p.name}</div>
-       <div class="card-desc">${p.desc}</div>
-     </a>`;
+  const accent = accentOf(p.category);
+  const search = esc((p.name + ' ' + p.desc).toLowerCase());
+  const flag   = FLAGSHIP.has(p.name);
+  const cls    = 'card reveal' + (flag ? ' flagship' : '');
+  const t      = thumb(p.url);
+  const inner  = `${flag ? '<span class="badge-flag">Flagship</span>' : ''}
+    <div class="card-thumb"><span class="card-icon">${p.icon}</span>${t
+      ? `<img alt="" loading="lazy" src="${t}" onload="this.classList.add('on')" onerror="this.remove()">` : ''}</div>
+    <div class="card-body"><div class="card-name">${p.name}</div><div class="card-desc">${p.desc}</div></div>`;
+  if (p.modal) return `<button class="${cls}" data-cat="${p.category}" data-search="${search}" style="--accent:${accent}" onclick="openModal('${p.modal}')">${inner}</button>`;
+  return `<a class="${cls}" data-cat="${p.category}" data-search="${search}" style="--accent:${accent}" href="${p.url}" target="_blank" rel="noopener noreferrer">${inner}</a>`;
 }
 
 function renderSoon(p) {
-  return `<span class="card soon">
+  const accent = accentOf(p.category);
+  const search = esc((p.name + ' ' + p.desc).toLowerCase());
+  return `<span class="card soon" data-cat="${p.category}" data-search="${search}" style="--accent:${accent}">
     <span class="badge">Coming Soon</span>
-    <span class="card-icon">${p.icon}</span>
-    <div class="card-name">${p.name}</div>
-    <div class="card-desc">${p.desc}</div>
+    <div class="card-thumb"><span class="card-icon">${p.icon}</span></div>
+    <div class="card-body"><div class="card-name">${p.name}</div><div class="card-desc">${p.desc}</div></div>
   </span>`;
 }
 
-[
-  { id: 'startupFull', cat: 'startup_full' },
-  { id: 'games',       cat: 'games'    },
-  { id: 'sports',      cat: 'sports'   },
-  { id: 'prof',        cat: 'prof'     },
-  { id: 'finance',     cat: 'finance'  },
-  { id: 'startup',     cat: 'startup'  },
-  { id: 'learning',    cat: 'learning' },
-  { id: 'personal',    cat: 'personal' },
-].forEach(({ id, cat }) => {
-  const cards = [
+SECTIONS.forEach(({ id, cat }) => {
+  const grid = document.getElementById(id + 'Grid');
+  grid.innerHTML = [
     ...LIVE.filter(p => p.category === cat).map(renderLive),
     ...SOON.filter(p => p.category === cat).map(renderSoon),
-  ];
-  document.getElementById(id + 'Grid').innerHTML = cards.join('');
+  ].join('');
+  const sec = grid.closest('section');
+  sec.dataset.cat = cat;
+  sec.style.setProperty('--accent', accentOf(cat));
+});
+
+// ── Hero: rotating word + stat strip ──────────────────────────────
+const WORDS = ['golf apps', 'finance trackers', 'language tutors', 'browser games', 'interview prep', 'travel guides', 'sports brackets'];
+let wi = 0;
+const rotEl = document.getElementById('rotword');
+setInterval(() => {
+  wi = (wi + 1) % WORDS.length;
+  rotEl.style.animation = 'none'; void rotEl.offsetWidth; rotEl.style.animation = '';
+  rotEl.textContent = WORDS[wi];
+}, 2200);
+
+const catCount = new Set(LIVE.map(p => p.category)).size;
+document.getElementById('stats').innerHTML = `
+  <div class="stat"><b>${LIVE.length}</b><span>projects</span></div>
+  <div class="stat"><b>${catCount}</b><span>categories</span></div>
+  <div class="stat"><b>∞</b><span>shipped solo</span></div>`;
+
+// ── Filter pills + search ─────────────────────────────────────────
+const pillsEl = document.getElementById('pills');
+let activeCat = 'all', query = '';
+pillsEl.innerHTML = [{ cat: 'all', label: 'All' }, ...SECTIONS.map(s => ({ cat: s.cat, label: CAT_META[s.cat].label }))]
+  .map(p => `<button class="pill${p.cat === 'all' ? ' active' : ''}" data-cat="${p.cat}"${p.cat !== 'all' ? ` style="--accent:${accentOf(p.cat)}"` : ''}>${p.label}</button>`).join('');
+
+function applyFilters() {
+  document.querySelectorAll('main section').forEach(sec => {
+    const cat = sec.dataset.cat;
+    let visible = 0;
+    sec.querySelectorAll('.card').forEach(card => {
+      const show = (activeCat === 'all' || activeCat === cat) && (!query || (card.dataset.search || '').includes(query));
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    sec.style.display = visible ? '' : 'none';
+  });
+}
+pillsEl.addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if (!b) return;
+  activeCat = b.dataset.cat;
+  pillsEl.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p === b));
+  applyFilters();
+});
+const searchEl = document.getElementById('search');
+searchEl.addEventListener('input', () => { query = searchEl.value.trim().toLowerCase(); applyFilters(); });
+
+// ── Surprise me ───────────────────────────────────────────────────
+document.getElementById('surprise').addEventListener('click', () => {
+  const live = LIVE.filter(p => p.url);
+  window.open(live[Math.floor(Math.random() * live.length)].url, '_blank', 'noopener');
+});
+
+// ── Scroll reveal (staggered) ─────────────────────────────────────
+const io = new IntersectionObserver(entries => {
+  entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+}, { rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.grid').forEach(grid => {
+  [...grid.children].forEach((card, i) => { card.style.transitionDelay = Math.min(i, 6) * 40 + 'ms'; io.observe(card); });
+});
+
+// ── Spotlight glow follows the cursor ─────────────────────────────
+document.addEventListener('pointermove', e => {
+  const card = e.target.closest('.card'); if (!card) return;
+  const r = card.getBoundingClientRect();
+  card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+  card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+});
+
+// ── Command palette (⌘K / Ctrl+K) ─────────────────────────────────
+const cmdk = document.getElementById('cmdk');
+const cmdkInput = document.getElementById('cmdkInput');
+const cmdkList = document.getElementById('cmdkList');
+const cmdkItems = LIVE.filter(p => p.url).map(p => ({ name: p.name, icon: p.icon, url: p.url, cat: (CAT_META[p.category] || {}).label || '' }));
+let cmdkFiltered = cmdkItems, cmdkSel = 0;
+
+function drawCmdk() {
+  if (!cmdkFiltered.length) { cmdkList.innerHTML = '<div class="cmdk-empty">No projects found</div>'; return; }
+  cmdkList.innerHTML = cmdkFiltered.map((it, i) =>
+    `<div class="cmdk-item${i === cmdkSel ? ' sel' : ''}" data-i="${i}"><span class="ci-icon">${it.icon}</span><span class="ci-name">${it.name}</span><span class="ci-cat">${it.cat}</span></div>`).join('');
+}
+function openCmdk() { cmdk.classList.add('open'); cmdkInput.value = ''; cmdkFiltered = cmdkItems; cmdkSel = 0; drawCmdk(); cmdkInput.focus(); document.body.style.overflow = 'hidden'; }
+function closeCmdk() { cmdk.classList.remove('open'); document.body.style.overflow = ''; }
+function goCmdk() { const it = cmdkFiltered[cmdkSel]; if (it) window.open(it.url, '_blank', 'noopener'); closeCmdk(); }
+function scrollSel() { const el = cmdkList.querySelector('.cmdk-item.sel'); if (el) el.scrollIntoView({ block: 'nearest' }); }
+
+cmdkInput.addEventListener('input', () => {
+  const q = cmdkInput.value.trim().toLowerCase();
+  cmdkFiltered = cmdkItems.filter(it => (it.name + ' ' + it.cat).toLowerCase().includes(q));
+  cmdkSel = 0; drawCmdk();
+});
+cmdkInput.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown') { e.preventDefault(); cmdkSel = Math.min(cmdkSel + 1, cmdkFiltered.length - 1); drawCmdk(); scrollSel(); }
+  else if (e.key === 'ArrowUp') { e.preventDefault(); cmdkSel = Math.max(cmdkSel - 1, 0); drawCmdk(); scrollSel(); }
+  else if (e.key === 'Enter') { e.preventDefault(); goCmdk(); }
+});
+cmdkList.addEventListener('click', e => { const it = e.target.closest('.cmdk-item'); if (!it) return; cmdkSel = +it.dataset.i; goCmdk(); });
+cmdk.addEventListener('click', e => { if (e.target === cmdk) closeCmdk(); });
+document.getElementById('cmdkHint').addEventListener('click', openCmdk);
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); cmdk.classList.contains('open') ? closeCmdk() : openCmdk(); }
+  else if (e.key === 'Escape' && cmdk.classList.contains('open')) closeCmdk();
 });
 
 // ── Modal ─────────────────────────────────────────────────────────
