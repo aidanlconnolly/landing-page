@@ -11,6 +11,16 @@ A static personal landing page — no build step, deploys directly to Vercel.
 - `thumbs/` — committed screenshot thumbnails for each project card (`<slug>.jpg`, ~50–100KB) plus `capture.py` (generates them).
 - `favicon.svg`, `.gitignore`.
 
+## Local development
+
+No build, lint, or test step — it's a single static `index.html`. Preview it with any static server; this repo's `.claude/launch.json` uses:
+
+```
+npx serve -l 4343 .
+```
+
+Then open `http://localhost:4343`. Edit `index.html` and refresh.
+
 ## Deploying
 
 Push to GitHub and Vercel auto-deploys on every commit. No build command or output directory needed — set the Vercel root to `/`. Repo: https://github.com/aidanlconnolly/landing-page
