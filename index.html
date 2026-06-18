@@ -401,6 +401,15 @@ header h1 {
   background: var(--navy); color: #fff; border-color: var(--navy);
 }
 html.dark .pill.active { background: #58a6ff; color: #0d1117; border-color: #58a6ff; }
+/* Compact category dropdown — only used on mobile once scrolled */
+.cat-select {
+  display: none;
+  border: 1px solid var(--border); background: var(--card); color: var(--text);
+  font: inherit; font-size: 0.8rem; font-weight: 600;
+  padding: 7px 12px; border-radius: 99px; cursor: pointer;
+}
+.cat-select:focus { outline: none; border-color: var(--navy); }
+html.dark .cat-select:focus { border-color: #58a6ff; }
 .tools { display: flex; gap: 8px; align-items: center; }
 .search {
   border: 1px solid var(--border); background: var(--bg); color: var(--text);
@@ -524,6 +533,9 @@ html.dark .cmdk-item.sel, html.dark .cmdk-item:hover { background: rgba(88,166,2
   .search { width: 130px; }
   .search:focus { width: 150px; }
   .kbd-hint { display: none; }
+  /* Once scrolled, collapse the wrapping filter pills into a compact dropdown */
+  .toolbar.scrolled .pills { display: none; }
+  .toolbar.scrolled .cat-select { display: block; flex: 1; min-width: 0; }
 }
 
   </style>
@@ -550,6 +562,7 @@ html.dark .cmdk-item.sel, html.dark .cmdk-item:hover { background: rgba(88,166,2
 <div class="toolbar">
   <div class="toolbar-inner">
     <div class="pills" id="pills"></div>
+    <select class="cat-select" id="catSelect" aria-label="Filter projects by category"></select>
     <div class="tools">
       <input class="search" id="search" type="search" placeholder="Search projects…" aria-label="Search projects" />
       <button class="surprise" id="surprise" title="Open a random project">🎲 Surprise me</button>
@@ -828,12 +841,29 @@ function applyFilters() {
     sec.style.display = visible ? '' : 'none';
   });
 }
+// Compact dropdown mirror of the pills (shown on mobile once scrolled)
+const catSelectEl = document.getElementById('catSelect');
+catSelectEl.innerHTML = [{ cat: 'all', label: 'All categories' }, ...SECTIONS.map(s => ({ cat: s.cat, label: CAT_META[s.cat].label }))]
+  .map(o => `<option value="${o.cat}">${o.label}</option>`).join('');
+
+function setCategory(cat) {
+  activeCat = cat;
+  pillsEl.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p.dataset.cat === cat));
+  if (catSelectEl.value !== cat) catSelectEl.value = cat;
+  applyFilters();
+}
 pillsEl.addEventListener('click', e => {
   const b = e.target.closest('.pill'); if (!b) return;
-  activeCat = b.dataset.cat;
-  pillsEl.querySelectorAll('.pill').forEach(p => p.classList.toggle('active', p === b));
-  applyFilters();
+  setCategory(b.dataset.cat);
 });
+catSelectEl.addEventListener('change', () => setCategory(catSelectEl.value));
+
+// Collapse pills → dropdown after scrolling past the header (mobile only, via CSS)
+const toolbarEl = document.querySelector('.toolbar');
+const onScroll = () => toolbarEl.classList.toggle('scrolled', window.scrollY > 160);
+addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+
 const searchEl = document.getElementById('search');
 searchEl.addEventListener('input', () => { query = searchEl.value.trim().toLowerCase(); applyFilters(); });
 
